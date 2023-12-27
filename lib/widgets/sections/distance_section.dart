@@ -14,7 +14,9 @@ class DistanceSection extends HookWidget {
     final state = useSelector((state) => state.distance)!;
     final dispatch = useDispatch();
 
-    void sendDistanceData() async {}
+    void sendDistanceData() async {
+      dispatch(sendApplicationData());
+    }
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,

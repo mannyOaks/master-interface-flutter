@@ -14,7 +14,9 @@ class TemperatureSection extends HookWidget {
     final state = useSelector((state) => state.temperature)!;
     final dispatch = useDispatch();
 
-    void sendTemperatureData() async {}
+    void sendTemperatureData() async {
+      dispatch(sendApplicationData());
+    }
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -77,7 +77,7 @@ class SetConnectionStatusAction {
   SetConnectionStatusAction({this.ip, this.port, this.isConnected});
 }
 
-ThunkAction<AppState> sendData() {
+ThunkAction<AppState> sendApplicationData() {
   return (Store<AppState> store) async {
     final command = store.state.command;
     final temperature = store.state.temperature;

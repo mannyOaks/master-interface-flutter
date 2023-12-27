@@ -4,7 +4,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 AppState reducer(AppState state, dynamic action) => AppState(
-      command: gainValuesReducer(state.command, action),
+      command: commandReducer(state.command, action),
       distance: distanceReducer(state.distance, action),
       temperature: temperatureReducer(state.temperature, action),
       connection: connectionStatusReducer(state.connection, action),

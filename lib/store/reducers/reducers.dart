@@ -23,7 +23,7 @@ MeasurerState distanceReducer(MeasurerState state, dynamic action) {
   return state;
 }
 
-CommandState gainValuesReducer(CommandState state, dynamic action) {
+CommandState commandReducer(CommandState state, dynamic action) {
   if (action is SetPointAction) {
     return state.copy(setPoint: action.setPoint);
   } else if (action is SetKPAction) {
@@ -32,6 +32,8 @@ CommandState gainValuesReducer(CommandState state, dynamic action) {
     return state.copy(ki: action.ki);
   } else if (action is SetKDAction) {
     return state.copy(kd: action.kd);
+  } else if (action is SetCommandOptionAction) {
+    return state.copy(command: action.command);
   }
 
   return state;
