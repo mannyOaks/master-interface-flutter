@@ -102,12 +102,11 @@ ThunkAction<AppState> sendApplicationData() {
       default:
     }
 
-    // format is 'command / command-value / temp-li / temp-ls / dist-li / dist-ls'
+    // TODO: @jose cambiar formato format is 'command / command-value / temp-li / temp-ls / dist-li / dist-ls'
     final data =
         "$commandData/${temperature.lowerLimit}/${temperature.upperLimit}/${distance.lowerLimit}/${distance.upperLimit}";
 
-    final service = await WifiConnectionService.getInstance();
-    await service.sendData(
+    await WifiConnectionService.sendData(
       ip: connection.ip!,
       port: int.parse(connection.port!),
       data: data,

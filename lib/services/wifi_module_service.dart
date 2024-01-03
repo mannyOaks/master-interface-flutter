@@ -1,37 +1,42 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:logger/logger.dart';
+import 'package:master_interface_flutter/models/connection_status.dart';
 import 'package:udp/udp.dart';
 
+final logger = Logger();
+
 class WifiConnectionService {
-  late UDP udp;
+  Future<void> connect({required Function(Datagram datagram) onRead}) async {
+    final client = await UDP.bind(Endpoint.any(port: const Port(9000)));
+    client.asStream().listen((event) {
+      logger.d(event);
+      if (event == null) {
+        return;
+      }
 
-  static WifiConnectionService? _instance;
-
-  static Future<WifiConnectionService> getInstance([int port = 9000]) async {
-    if (_instance == null) {
-      final client = await UDP.bind(Endpoint.any(port: Port(port)));
-      _instance = WifiConnectionService._private(client);
-    }
-
-    return _instance!;
+      onRead(event);
+    });
   }
 
-  WifiConnectionService._private(UDP client) {
-    udp = client;
-  }
-
-  Future<void> sendData({
+  static Future<void> sendData({
     required String ip,
     required int port,
     required String data,
   }) async {
-    udp.send(
-      data.codeUnits,
-      Endpoint.unicast(
-        InternetAddress(ip),
-        port: Port(port),
-      ),
-    );
+    final client = await RawDatagramSocket.bind(InternetAddress.anyIPv4, port);
+    client.send(data.codeUnits, InternetAddress(ip), port);
+  }
+
+  static Future<ConnectionStatus> pair() async {
+    var sender = await UDP.bind(Endpoint.any(port: const Port(65000)));
+
+    // send a simple string to a broadcast endpoint on port 65001.
+    var dataLength = await sender.send(
+        "Hello World!".codeUnits, Endpoint.broadcast(port: const Port(65001)));
+
+    stdout.write("$dataLength bytes sent.");
+    return ConnectionStatus(ip: null, port: null, isConnected: false);
   }
 }
